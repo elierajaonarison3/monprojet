@@ -20,8 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&hc4bp5y$=1@m3uoxqn+#%o#d#&n8%%hy0%^mb&_9r6atl*zs%'
-
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -85,7 +84,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
+import os
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -116,12 +115,15 @@ AUTHENTICATION_BACKENDS = [
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': '89634369083-6dn0p0rrm26emjhicso23mrset12n5ef.apps.googleusercontent.com',
-            'secret':    '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',
+            'client_id': os.environ.get('GOOGLE_CLIENT_ID'),
+            'secret': os.environ.get('GOOGLE_CLIENT_SECRET'),
         },
         'SCOPE': ['profile', 'email'],
     }
 }
+
+GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
 
 GOOGLE_CLIENT_ID     = '89634369083-6dn0p0rrm26emjhicso23mrset12n5ef.apps.googleusercontent.com'  
 GOOGLE_CLIENT_SECRET = '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'        
