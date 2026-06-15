@@ -23,7 +23,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in product
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = [
-    '.onrender.com'           ]
+    'https://monprojet1-ke8b.onrender.com'
+    ]
 
 
 # Application definition
