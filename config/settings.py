@@ -121,9 +121,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
-
-GOOGLE_CLIENT_ID     = '89634369083-6dn0p0rrm26emjhicso23mrset12n5ef.apps.googleusercontent.com'  
-GOOGLE_CLIENT_SECRET = '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'        
+      
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 

@@ -4,9 +4,7 @@ from rest_framework import serializers
 from .models import Marche, Soumission, Evaluation
 
 
-# ════════════════════════════════════════════════════════════
-# MARCHÉ
-# ════════════════════════════════════════════════════════════
+
 class MarcheSerializer(serializers.ModelSerializer):
     jours_restants  = serializers.SerializerMethodField()
     cree_par_email  = serializers.SerializerMethodField()
@@ -41,9 +39,7 @@ class MarcheSerializer(serializers.ModelSerializer):
         return None
 
 
-# ════════════════════════════════════════════════════════════
-# SOUMISSION
-# ════════════════════════════════════════════════════════════
+
 class SoumissionSerializer(serializers.ModelSerializer):
     marche_titre      = serializers.SerializerMethodField()
     marche_id         = serializers.SerializerMethodField()
@@ -80,9 +76,7 @@ class SoumissionSerializer(serializers.ModelSerializer):
         return None
 
 
-# ════════════════════════════════════════════════════════════
-# ÉVALUATION
-# ════════════════════════════════════════════════════════════
+
 class EvaluationSerializer(serializers.ModelSerializer):
     score_moyen = serializers.ReadOnlyField()
 
@@ -99,10 +93,6 @@ class EvaluationSerializer(serializers.ModelSerializer):
             'evaluateur', 'evalue_le', 'modifie_le'
         ]
 
-
-# ════════════════════════════════════════════════════════════
-# DOSSIER ÉVALUATEUR
-# ════════════════════════════════════════════════════════════
 class DossierEvaluateurSerializer(serializers.ModelSerializer):
     marche_titre        = serializers.CharField(
         source='marche.titre')
