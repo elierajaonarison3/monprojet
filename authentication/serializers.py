@@ -13,12 +13,22 @@ class MarcheSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Marche
         fields = [
-            'id', 'id_marche', 'titre', 'detail',
-            'categorie', 'budget', 'date_fin', 'statut',
-            'fichier_pdf', 'fichier_pdf_url',
-            'cree_par_email', 'cree_le', 'modifie_le',
-            'jours_restants',
-        ]
+                'id',
+                'id_marche',
+                'titre',
+                'detail',
+                'categorie',
+                'budget',
+                'date_debut',
+                'date_fin',
+                'statut',
+                'fichier_pdf',
+                'fichier_pdf_url',
+                'cree_par_email',
+                'cree_le',
+                'modifie_le',
+                'jours_restants',
+]
         read_only_fields = [
             'id_marche', 'statut', 'cree_le', 'modifie_le'
         ]

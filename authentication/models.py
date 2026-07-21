@@ -21,6 +21,7 @@ class Marche(models.Model):
     detail      = models.TextField()
     categorie   = models.CharField(max_length=50, choices=CATEGORIE_CHOICES)
     budget      = models.DecimalField(max_digits=15, decimal_places=2)
+    date_debut = models.DateField()
     date_fin    = models.DateTimeField()
     statut      = models.CharField(max_length=20, choices=STATUT_CHOICES,
                                    default='actif')
@@ -44,7 +45,6 @@ class Marche(models.Model):
             count = Marche.objects.filter(
                 cree_le__year=annee).count() + 1
             self.id_marche = f"M-{annee}-{str(count).zfill(3)}"
-        # Auto-mettre à jour le statut
         from django.utils import timezone
         if self.date_fin < timezone.now():
             self.statut = 'expire'
