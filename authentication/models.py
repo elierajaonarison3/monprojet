@@ -95,15 +95,15 @@ class Evaluation(models.Model):
         User, on_delete=models.SET_NULL,
         null=True, related_name='evaluations'
     )
-    note_technique  = models.DecimalField(
+    concurrencePrix  = models.DecimalField(
         max_digits=4, decimal_places=1,
         default=0
     )
-    note_financiere = models.DecimalField(
+    conformité = models.DecimalField(
         max_digits=4, decimal_places=1,
         default=0
     )
-    note_experience = models.DecimalField(
+    complementarite = models.DecimalField(
         max_digits=4, decimal_places=1,
         default=0
     )
@@ -121,9 +121,9 @@ class Evaluation(models.Model):
 
     @property
     def score_moyen(self):
-        return (float(self.note_technique) +
-                float(self.note_financiere) +
-                float(self.note_experience)) / 3
+        return (float(self.concurrencePrix) +
+                float(self.conformité) +
+                float(self.complementarite )) / 3
 
     def __str__(self):
         return f"Eval {self.soumission} → {self.decision}"
