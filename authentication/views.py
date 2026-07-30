@@ -19,9 +19,6 @@ User = get_user_model()
 ROLES_AUTORISES = ['Admin', 'PRMP', 'Évaluateur']
 
 
-# ════════════════════════════════════════════════════════════
-# 1. AUTH — Google OAuth2 (Fournisseurs)
-# ════════════════════════════════════════════════════════════
 class GoogleAuthView(APIView):
     permission_classes = []
 
@@ -193,9 +190,7 @@ class MarcheListView(APIView):
         )
 
 
-# ════════════════════════════════════════════════════════════
-# 4. MARCHÉS — Détail + Modification + Suppression
-# ════════════════════════════════════════════════════════════
+
 class MarcheDetailView(APIView):
     parser_classes = [MultiPartParser, FormParser, JSONParser]
 
@@ -255,9 +250,6 @@ class MarcheDetailView(APIView):
         )
 
 
-# ════════════════════════════════════════════════════════════
-# 5. SOUMISSIONS — Fournisseurs
-# ════════════════════════════════════════════════════════════
 class SoumissionView(APIView):
     permission_classes = [IsAuthenticated]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
@@ -309,9 +301,6 @@ class SoumissionView(APIView):
         )
 
 
-# ════════════════════════════════════════════════════════════
-# 6. SOUMISSIONS — PRMP voit toutes les soumissions
-# ════════════════════════════════════════════════════════════
 class SoumissionMarcheView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -363,9 +352,6 @@ class SoumissionMarcheView(APIView):
         })
 
 
-# ════════════════════════════════════════════════════════════
-# 7. ÉVALUATEUR — Voir tous les dossiers
-# ════════════════════════════════════════════════════════════
 class DossierEvaluateurView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -446,9 +432,6 @@ class DossierEvaluateurView(APIView):
         return Response(resultats)
 
 
-# ════════════════════════════════════════════════════════════
-# 8. ÉVALUATEUR — Créer ou modifier une évaluation
-# ════════════════════════════════════════════════════════════
 class EvaluationView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -531,10 +514,6 @@ class EvaluationView(APIView):
         }, status=status.HTTP_201_CREATED if created
            else status.HTTP_200_OK)
 
-
-# ════════════════════════════════════════════════════════════
-# 9. ÉVALUATEUR — Statistiques
-# ════════════════════════════════════════════════════════════
 class StatsEvaluateurView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -570,9 +549,7 @@ class StatsEvaluateurView(APIView):
             'rejetes':    rejetes,
             'reserves':   reserves,
         })
-# ════════════════════════════════════════════════════════════
-# ADMIN — Endpoints
-# ════════════════════════════════════════════════════════════
+
 class AdminUtilisateursView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -580,12 +557,18 @@ class AdminUtilisateursView(APIView):
         users = User.objects.all()
         data = []
         for u in users:
+            if u.is_superuser:
+                role = 'Admin'
+            elif u.groups.exists():
+                role = u.groups.first().name
+            else:
+                role = 'Aucun'
             data.append({
                 'id':       u.id,
                 'nom':      f'{u.first_name} {u.last_name}'.strip() or u.username,
                 'username': u.username,
                 'email':    u.email,
-                'role':     'Admin' if u.is_superuser else 'Fournisseurs',
+                'role':     role,
             })
         return Response(data)
 
