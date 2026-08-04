@@ -435,9 +435,9 @@ class EvaluationView(APIView):
 
     def post(self, request):
         soumission_id   = request.data.get('soumission')
-        note_technique  = request.data.get('note_technique')
-        note_financiere = request.data.get('note_financiere')
-        note_experience = request.data.get('note_experience')
+        concurencePrix  = request.data.get('concurencePrix')
+        conformite      = request.data.get('conformite')
+        complementaire  = request.data.get('complementaire')
         commentaire     = request.data.get('commentaire', '')
         decision        = request.data.get('decision', 'reserve')
 
@@ -455,7 +455,7 @@ class EvaluationView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        for note in [note_technique, note_financiere, note_experience]:
+        for note in [concurencePrix, conformite, complementaire]:
             if note is None:
                 return Response(
                     {'error': 'Toutes les notes sont requises'},
@@ -484,9 +484,9 @@ class EvaluationView(APIView):
             soumission=soumission,
             defaults={
                 'evaluateur':      request.user,
-                'note_technique':  note_technique,
-                'note_financiere': note_financiere,
-                'note_experience': note_experience,
+                'concurencePrix':  concurencePrix,
+                'conformite':      conformite,
+                'complementaire':  complementaire,
                 'commentaire':     commentaire,
                 'decision':        decision,
             }
