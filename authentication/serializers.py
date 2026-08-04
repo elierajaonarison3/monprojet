@@ -94,8 +94,8 @@ class EvaluationSerializer(serializers.ModelSerializer):
         model  = Evaluation
         fields = [
             'id', 'soumission',
-            'note_technique', 'note_financiere',
-            'note_experience', 'commentaire',
+            'concurencePrix', 'conformite',
+            'complementaire', 'commentaire',
             'decision', 'score_moyen',
             'evalue_le', 'modifie_le',
         ]

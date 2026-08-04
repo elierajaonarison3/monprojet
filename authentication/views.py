@@ -1,5 +1,3 @@
-# authentication/views.py
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -399,9 +397,9 @@ class DossierEvaluateurView(APIView):
             if a_evaluation:
                 eval_data = {
                     'id':              eval_obj.id,
-                    'note_technique':  float(eval_obj.note_technique),
-                    'note_financiere': float(eval_obj.note_financiere),
-                    'note_experience': float(eval_obj.note_experience),
+                    'concurencePrix':  float(eval_obj.concurencePrix),
+                    'conformite':      float(eval_obj.conformite),
+                    'complementaire':  float(eval_obj.complementaire),
                     'score_moyen':     eval_obj.score_moyen,
                     'commentaire':     eval_obj.commentaire,
                     'decision':        eval_obj.decision,
