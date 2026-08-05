@@ -366,6 +366,7 @@ class DossierEvaluateurView(APIView):
         resultats = []
         for s in soumissions:
             try:
+                print(f"=== Traitement soumission ID: {s.id} ===")
                 try:
                 
                     eval_obj     = s.evaluation
