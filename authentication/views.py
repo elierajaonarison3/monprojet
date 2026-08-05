@@ -366,70 +366,83 @@ class DossierEvaluateurView(APIView):
         resultats = []
         for s in soumissions:
             try:
-                eval_obj     = s.evaluation
-                a_evaluation = True
-            except Exception:
-                eval_obj     = None
-                a_evaluation = False
+                try:
+                
+                    eval_obj     = s.evaluation
+                    a_evaluation = True
+                except Exception:
+                    eval_obj     = None
+                    a_evaluation = False
 
-            statut_eval = 'évalué' if a_evaluation else 'en_attente'
+                statut_eval = 'évalué' if a_evaluation else 'en_attente'
 
-            if statut and statut != 'tous':
-                if statut == 'en_attente' and a_evaluation:
-                    continue
+                if statut and statut != 'tous':
+                    if statut == 'en_attente' and a_evaluation:
+                        continue
                 if statut == 'évalué' and not a_evaluation:
                     continue
 
-            fournisseur = s.fournisseur
-            nom = f"{fournisseur.first_name} {fournisseur.last_name}".strip()
-            if not nom:
-                nom = fournisseur.username
+                fournisseur = s.fournisseur
+                nom = f"{fournisseur.first_name} {fournisseur.last_name}".strip()
+                if not nom:
+                    nom = fournisseur.username
 
-            fichier_pdf_url = None
-            if s.fichier_pdf:
-                try:
-                    fichier_pdf_url = request.build_absolute_uri(
+                fichier_pdf_url = None
+                if s.fichier_pdf:
+                    try:
+                        fichier_pdf_url = request.build_absolute_uri(
                         s.fichier_pdf.url)
-                except Exception:
-                    pass
+                    except Exception:
+                        pass
 
-            eval_data = None
-            if a_evaluation:
-                eval_data = {
-                    'id': eval_obj.id,
-                    'concurrencePrix': float(eval_obj.concurrencePrix),
-                    'conformité': float(eval_obj.conformité),
-                    'complementarite': float(eval_obj.complementarite),
-                    'score_moyen': eval_obj.score_moyen,
-                    'commentaire': eval_obj.commentaire,
-                    'decision': eval_obj.decision,
-                    'evalue_le':( eval_obj.evalue_le.isoformat()
-                    if eval_obj.evalue_le else None
-                    ),
+                eval_data = None
+                if a_evaluation:
+                    eval_data = {
+                        'id': eval_obj.id,
+                        'concurrencePrix': float(eval_obj.concurrencePrix),
+                        'conformité': float(eval_obj.conformité),
+                        'complementarite': float(eval_obj.complementarite),
+                        'score_moyen': eval_obj.score_moyen,
+                        'commentaire': eval_obj.commentaire,
+                        'decision': eval_obj.decision,
+                        'evalue_le':( eval_obj.evalue_le.isoformat()
+                        if eval_obj.evalue_le else None
+                        ),
                 }
 
-            resultats.append({
-                'id':                  s.id,
-                'marche':              s.marche.id,
-                'marche_titre':        s.marche.titre,
-                'marche_id':           s.marche.id_marche,
-                'budget_marche':       float(s.marche.budget),
-                'montant':             float(s.montant),
-                'fournisseur':         fournisseur.id,
-                'fournisseur_nom':     nom,
-                'fournisseur_email':   fournisseur.email,
-                'fournisseur_societe': fournisseur.username,
-                'note':                s.note,
-                'fichier_pdf':         str(s.fichier_pdf) if s.fichier_pdf else None,
-                'fichier_pdf_url':     fichier_pdf_url,
-                'statut':              s.statut,
-                'statut_evaluation':   statut_eval,
-                'soumis_le':           s.soumis_le.isoformat(),
-                'evaluation':          eval_data,
-            })
+                resultats.append({
+                    'id':                  s.id,
+                    'marche':              s.marche.id,
+                    'marche_titre':        s.marche.titre,
+                    'marche_id':           s.marche.id_marche,
+                    'budget_marche':       float(s.marche.budget),
+                    'montant':             float(s.montant),
+                    'fournisseur':         fournisseur.id,
+                    'fournisseur_nom':     nom,
+                    'fournisseur_email':   fournisseur.email,
+                    'fournisseur_societe': fournisseur.username,
+                    'note':                s.note,
+                    'fichier_pdf':         str(s.fichier_pdf) if s.fichier_pdf else None,
+                    'fichier_pdf_url':     fichier_pdf_url,
+                    'statut':              s.statut,
+                    'statut_evaluation':   statut_eval,
+                    'soumis_le':           s.soumis_le.isoformat(),
+                    'evaluation':          eval_data,
+                })
 
-        print(f"=== Résultats envoyés: {len(resultats)} ===")
-        return Response(resultats)
+                print(f"=== Résultats envoyés: {len(resultats)} ===")
+            except Exception as e:
+                import traceback
+                print(f"=== Erreur lors de la récupération des soumissions: {e} ===")
+                traceback.print_exc()
+            return Response({
+                'error': 'str(e)',
+                'type': type(e).__name__,
+                'soumissions_id': s.id,
+            },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                
+            )
 
 
 class EvaluationView(APIView):
