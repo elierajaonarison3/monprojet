@@ -396,16 +396,16 @@ class DossierEvaluateurView(APIView):
             eval_data = None
             if a_evaluation:
                 eval_data = {
-                    'id':              eval_obj.id,
-                    'concurrencePrix':  float(eval_obj.concurrencePrix),
-                    'conformité':      float(eval_obj.conformité),
-                    'complementarite   ':  float(eval_obj.complementarite),
-                    'score_moyen':     eval_obj.score_moyen,
-                    'commentaire':     eval_obj.commentaire,
-                    'decision':        eval_obj.decision,
-                    'evalue_le':       eval_obj.evalue_le.isoformat()
+                    'id': eval_obj.id,
+                    'concurrencePrix': float(eval_obj.concurrencePrix),
+                    'conformité': float(eval_obj.conformité),
+                    'complementarite': float(eval_obj.complementarite),
+                    'score_moyen': eval_obj.score_moyen,
+                    'commentaire': eval_obj.commentaire,
+                    'decision': eval_obj.decision,
+                    'evalue_le':( eval_obj.evalue_le.isoformat()
                     if eval_obj.evalue_le else None
-                    ,
+                    ),
                 }
 
             resultats.append({
