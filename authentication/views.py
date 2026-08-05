@@ -397,13 +397,15 @@ class DossierEvaluateurView(APIView):
             if a_evaluation:
                 eval_data = {
                     'id':              eval_obj.id,
-                    'concurencePrix':  float(eval_obj.concurencePrix),
-                    'conformite':      float(eval_obj.conformite),
-                    'complementaire':  float(eval_obj.complementaire),
+                    'concurrencePrix':  float(eval_obj.concurrencePrix),
+                    'conformité':      float(eval_obj.conformité),
+                    'complementarite   ':  float(eval_obj.complementarite),
                     'score_moyen':     eval_obj.score_moyen,
                     'commentaire':     eval_obj.commentaire,
                     'decision':        eval_obj.decision,
-                    'evalue_le':       eval_obj.evalue_le.isoformat(),
+                    'evalue_le':       eval_obj.evalue_le.isoformat()
+                    if eval_obj.evalue_le else None
+                    ,
                 }
 
             resultats.append({
@@ -435,9 +437,9 @@ class EvaluationView(APIView):
 
     def post(self, request):
         soumission_id   = request.data.get('soumission')
-        concurencePrix  = request.data.get('concurencePrix')
-        conformite      = request.data.get('conformite')
-        complementaire  = request.data.get('complementaire')
+        concurrencePrix  = request.data.get('concurrencePrix')
+        conformité      = request.data.get('conformité')
+        complementarite  = request.data.get('complementarite')
         commentaire     = request.data.get('commentaire', '')
         decision        = request.data.get('decision', 'reserve')
 
@@ -455,7 +457,7 @@ class EvaluationView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        for note in [concurencePrix, conformite, complementaire]:
+        for note in [concurrencePrix, conformité, complementarite]:
             if note is None:
                 return Response(
                     {'error': 'Toutes les notes sont requises'},
@@ -484,9 +486,9 @@ class EvaluationView(APIView):
             soumission=soumission,
             defaults={
                 'evaluateur':      request.user,
-                'concurencePrix':  concurencePrix,
-                'conformite':      conformite,
-                'complementaire':  complementaire,
+                'concurrencePrix':  concurrencePrix,
+                'conformité':      conformité,
+                'complementarite':  complementarite,
                 'commentaire':     commentaire,
                 'decision':        decision,
             }
@@ -502,9 +504,9 @@ class EvaluationView(APIView):
             'created':    created,
             'evaluation': {
                 'id':              evaluation.id,
-                'concurencePrix':  float(evaluation.concurencePrix),
-                'conformite':      float(evaluation.conformite),
-                'complementaire':  float(evaluation.complementaire),
+                'concurrencePrix':  float(evaluation.concurrencePrix),
+                'conformité':      float(evaluation.conformité),
+                'complementarite':  float(evaluation.complementarite),
                 'commentaire':     evaluation.commentaire,
                 'decision':        evaluation.decision,
             }
