@@ -502,10 +502,9 @@ class EvaluationView(APIView):
             'created':    created,
             'evaluation': {
                 'id':              evaluation.id,
-                'note_technique':  float(evaluation.note_technique),
-                'note_financiere': float(evaluation.note_financiere),
-                'note_experience': float(evaluation.note_experience),
-                'score_moyen':     evaluation.score_moyen,
+                'concurencePrix':  float(evaluation.concurencePrix),
+                'conformite':      float(evaluation.conformite),
+                'complementaire':  float(evaluation.complementaire),
                 'commentaire':     evaluation.commentaire,
                 'decision':        evaluation.decision,
             }
