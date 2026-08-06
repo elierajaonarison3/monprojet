@@ -93,14 +93,21 @@ class EvaluationSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Evaluation
         fields = [
-            'id', 'soumission',
-            'concurencePrix', 'conformite',
-            'complementaire', 'commentaire',
-            'decision', 'score_moyen',
-            'evalue_le', 'modifie_le',
+            'id',
+            'soumission',
+            'concurrencePrix',
+            'conformité',
+            'complementarie',
+            'commentaire',
+            'decision',
+            'score_moyen',
+            'evalue_le',
+            'modifie_le',
         ]
         read_only_fields = [
-            'evaluateur', 'evalue_le', 'modifie_le'
+            'evaluateur',
+            'evalue_le',
+            'modifie_le'
         ]
 
 class DossierEvaluateurSerializer(serializers.ModelSerializer):
