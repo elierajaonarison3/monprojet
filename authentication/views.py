@@ -448,10 +448,10 @@ class EvaluationView(APIView):
     def post(self, request):
         print("=== DATA RECUE DJANGO ===")
         print(request.data)
-        soumission_id   = request.data.get('soumission')
+        soumission_id   = request.data.get('soumission_id')
         concurrencePrix  = request.data.get('concurrencePrix')
         conformite      = request.data.get('conformite')
-        complementarite  = request.data.get('complementarite')
+        complementarite  = request.data.get('complementaires')
         commentaire     = request.data.get('commentaire', '')
         decision        = request.data.get('decision', 'reserve')
 
