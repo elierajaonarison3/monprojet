@@ -10,6 +10,7 @@ from django.db.models import Q
 from django.utils import timezone
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
+from urllib3 import request
 from .models import Marche, Soumission, Evaluation
 from .serializers import MarcheSerializer, SoumissionSerializer
 import traceback
@@ -445,6 +446,8 @@ class EvaluationView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        print("=== DATA RECUE DJANGO ===")
+        print(request.data)
         soumission_id   = request.data.get('soumission')
         concurrencePrix  = request.data.get('concurrencePrix')
         conformite      = request.data.get('conformite')
