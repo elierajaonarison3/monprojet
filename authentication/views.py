@@ -447,7 +447,7 @@ class EvaluationView(APIView):
     def post(self, request):
         soumission_id   = request.data.get('soumission')
         concurrencePrix  = request.data.get('concurrencePrix')
-        conformité      = request.data.get('conformité')
+        conformite      = request.data.get('conformite')
         complementarite  = request.data.get('complementarite')
         commentaire     = request.data.get('commentaire', '')
         decision        = request.data.get('decision', 'reserve')
@@ -466,7 +466,7 @@ class EvaluationView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        for note in [concurrencePrix, conformité, complementarite]:
+        for note in [concurrencePrix, conformite, complementarite]:
             if note is None:
                 return Response(
                     {'error': 'Toutes les notes sont requises'},
@@ -496,7 +496,7 @@ class EvaluationView(APIView):
             defaults={
                 'evaluateur':      request.user,
                 'concurrencePrix':  concurrencePrix,
-                'conformité':      conformité,
+                'conformite':      conformite,
                 'complementarite':  complementarite,
                 'commentaire':     commentaire,
                 'decision':        decision,
@@ -514,7 +514,7 @@ class EvaluationView(APIView):
             'evaluation': {
                 'id':              evaluation.id,
                 'concurrencePrix':  float(evaluation.concurrencePrix),
-                'conformité':      float(evaluation.conformité),
+                'conformite':      float(evaluation.conformite),
                 'complementarite':  float(evaluation.complementarite),
                 'commentaire':     evaluation.commentaire,
                 'decision':        evaluation.decision,
