@@ -457,8 +457,7 @@ class EvaluationView(APIView):
 
         if not soumission_id:
             return Response(
-                {'error': 'soumission est requis'},
-                status=status.HTTP_400_BAD_REQUEST
+                request.data,  
             )
 
         try:
