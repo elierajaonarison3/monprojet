@@ -99,7 +99,7 @@ class Evaluation(models.Model):
         max_digits=4, decimal_places=1,
         default=0
     )
-    conformité = models.DecimalField(
+    conformite = models.DecimalField(
         max_digits=4, decimal_places=1,
         default=0
     )
@@ -122,7 +122,7 @@ class Evaluation(models.Model):
     @property
     def score_moyen(self):
         return (float(self.concurrencePrix) +
-                float(self.conformité) +
+                float(self.conformite) +
                 float(self.complementarite )) / 3
 
     def __str__(self):
