@@ -80,6 +80,7 @@ class Soumission(models.Model):
 
     def __str__(self):
         return f"Soumission {self.fournisseur.email} →gd {self.marche.id_marche}"
+    
 class Evaluation(models.Model):
     DECISION_CHOICES = [
         ('accepte', 'Accepté'),

@@ -372,13 +372,15 @@ class DossierEvaluateurView(APIView):
 
             for s in soumissions:
                 print(f"=== Traitement soumission ID: {s.id} ===")
-
-                try:
-                    eval_obj = s.evaluation
-                    a_evaluation = True
-                except Exception:
-                    eval_obj = None
-                    a_evaluation = False
+                
+                eval_obj = Evaluation.objects.filter(soumission=s).first()
+                a_evaluation = eval_obj is not None
+                print(
+                    f"=== Soumission {s.id} | "
+                    f"Evaluation: {eval_obj.id if eval_obj else 'AUCUNE'} ==="
+                )   
+                
+                
 
                 statut_eval = 'évalué' if a_evaluation else 'en_attente'
 
@@ -448,7 +450,7 @@ class EvaluationView(APIView):
     def post(self, request):
         print("=== DATA RECUE DJANGO ===")
         print(request.data)
-        soumission_id   = request.data.get('soumission_id')
+        soumission_id   = request.data.get('soumission') or request.data.get('soumission_id')
         concurrencePrix  = request.data.get('concurrencePrix')
         conformite      = request.data.get('conformite')
         complementarite  = request.data.get('complementaires')
@@ -457,7 +459,11 @@ class EvaluationView(APIView):
 
         if not soumission_id:
             return Response(
-                request.data,  
+                {
+                    "ok":True,
+                    "data":request.data,
+                }
+                
             )
 
         try:
