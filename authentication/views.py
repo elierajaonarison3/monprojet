@@ -401,7 +401,7 @@ class DossierEvaluateurView(APIView):
                     eval_data = {
                         'id': eval_obj.id,
                         'concurrencePrix': float(eval_obj.concurrencePrix),
-                        'conformité': float(eval_obj.conformité),
+                        'conformite': float(eval_obj.conformite),
                         'complementarite': float(eval_obj.complementarite),
                         'score_moyen': eval_obj.score_moyen,
                         'commentaire': eval_obj.commentaire,
