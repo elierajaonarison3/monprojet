@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
 User = get_user_model()
-
 class Marche(models.Model):
     STATUT_CHOICES = [
         ('actif',   'Actif'),
@@ -15,7 +13,6 @@ class Marche(models.Model):
         ('Services',    'Services'),
         ('Études',      'Études'),
     ]
-
     id_marche   = models.CharField(max_length=20, unique=True, blank=True)
     titre       = models.CharField(max_length=200)
     detail      = models.TextField()
@@ -31,10 +28,8 @@ class Marche(models.Model):
                                     null=True, related_name='marches')
     cree_le     = models.DateTimeField(auto_now_add=True)
     modifie_le  = models.DateTimeField(auto_now=True)
-
     class Meta:
         ordering = ['-cree_le']
-
     def __str__(self):
         return f"{self.id_marche} - {self.titre}"
 
@@ -116,7 +111,6 @@ class Evaluation(models.Model):
     )
     evalue_le       = models.DateTimeField(auto_now_add=True)
     modifie_le      = models.DateTimeField(auto_now=True)
-
     class Meta:
         ordering = ['-evalue_le']
 
