@@ -648,3 +648,14 @@ class AdminCreerCompteView(APIView):
             'id':      user.id,
             'email':   user.email,
         }, status=201)
+
+from django.db import connection
+
+class DatabaseTestView(APIView):
+    permission_classes = []
+
+    def get(self, request):
+        return Response({
+            "database_engine": connection.vendor,
+            "database_name": settings.DATABASES['default']['NAME'],
+        })
