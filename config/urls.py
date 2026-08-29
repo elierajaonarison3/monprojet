@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.http import JsonResponse
 from authentication.views import DatabaseTestView
+from authentication.views import InitialiserComptesView
 
 def home(request):
     return JsonResponse({
@@ -14,4 +15,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('authentication.urls')),
     path('api/test-db/', DatabaseTestView.as_view()),
+    path('api/initialiser-comptes/', InitialiserComptesView.as_view()),
 ]

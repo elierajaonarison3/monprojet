@@ -659,3 +659,76 @@ class DatabaseTestView(APIView):
             "database_engine": connection.vendor,
             "database_name": settings.DATABASES['default']['NAME'],
         })
+
+
+from django.contrib.auth.models import Group
+from django.db import transaction
+
+
+class InitialiserComptesView(APIView):
+    permission_classes = []
+
+    def get(self, request):
+
+        comptes = [
+            {
+                'email': 'admin@marche.com',
+                'password': 'Admin@123456',
+                'nom': 'Administrateur',
+                'role': 'Admin',
+            },
+            {
+                'email': 'prmp@marche.com',
+                'password': 'Prmp@123456',
+                'nom': 'PRMP',
+                'role': 'PRMP',
+            },
+            {
+                'email': 'evaluateur@marche.com',
+                'password': 'Evaluateur@123456',
+                'nom': 'Évaluateur',
+                'role': 'Évaluateur',
+            },
+        ]
+
+        resultats = []
+
+        with transaction.atomic():
+
+            for compte in comptes:
+
+                email = compte['email']
+                username = email.split('@')[0]
+
+                user, created = User.objects.get_or_create(
+                    email=email,
+                    defaults={
+                        'username': username,
+                        'first_name': compte['nom'],
+                    }
+                )
+
+                user.set_password(compte['password'])
+
+                if compte['role'] == 'Admin':
+                    user.is_staff = True
+                    user.is_superuser = True
+
+                user.save()
+
+                if compte['role'] != 'Admin':
+                    group, _ = Group.objects.get_or_create(
+                        name=compte['role']
+                    )
+                    user.groups.add(group)
+
+                resultats.append({
+                    'email': email,
+                    'role': compte['role'],
+                    'created': created,
+                })
+
+        return Response({
+            'message': 'Comptes initialisés',
+            'comptes': resultats
+        })
