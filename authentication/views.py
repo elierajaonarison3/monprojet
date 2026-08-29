@@ -14,6 +14,7 @@ from urllib3 import request
 from .models import Marche, Soumission, Evaluation
 from .serializers import MarcheSerializer, SoumissionSerializer
 import traceback
+from django.contrib.auth.models import Group
 
 User = get_user_model()
 ROLES_AUTORISES = ['Admin', 'PRMP', 'Évaluateur']
@@ -615,39 +616,53 @@ class AdminChangerMdpView(APIView):
         request.user.save()
         return Response({'message': 'Mot de passe mis à jour'})
 
-
 class AdminCreerCompteView(APIView):
     permission_classes = [IsAuthenticated]
-
+    
     def post(self, request):
-        nom      = request.data.get('nom', '')
-        email    = request.data.get('email')
+        nom      = request.data.get('nom').strip()
+        email    = request.data.get('email').strip().lower()
         password = request.data.get('password')
         role     = request.data.get('role')
-
+        
         if not email or not password:
             return Response(
                 {'error': 'Email et mot de passe requis'},
-                status=400)
-
+                status=400
+            )
+        
         if User.objects.filter(email=email).exists():
             return Response(
                 {'error': 'Email déjà utilisé'},
-                status=400)
-
-        noms = nom.split(' ', 1)
+                status=400
+            )
+        
+        base_username = email.split('@')[0]
+        username = base_username
+        compteur=1
+        while User.objects.filter(username=username).exists():
+            username = f"{base_username}{compteur}"
+            compteur += 1
+        
+        noms=nom.split(' ', 1)
         user = User.objects.create_user(
-            username=email.split('@')[0],
+            username=username,
             email=email,
             password=password,
             first_name=noms[0] if noms else '',
-            last_name=noms[1] if len(noms) > 1 else '',
+            last_name=noms[1] if len(noms) > 1 else ''
         )
+        group, _ = Group.objects.get_or_create(name=role)
+        user.groups.add(group)
+        
         return Response({
-            'message': f'Compte {role} créé',
-            'id':      user.id,
-            'email':   user.email,
+            'message':f'Compte créé pour {email} avec le rôle {role}',
+            'id': user.id,
+            'email': user.email,
+            'role': role,
         }, status=201)
+        
+        
 
 from django.db import connection
 
