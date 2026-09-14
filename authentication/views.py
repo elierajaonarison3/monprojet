@@ -129,7 +129,6 @@ class EmailLoginView(APIView):
 
 class MarcheListView(APIView):
     parser_classes = [MultiPartParser, FormParser, JSONParser]
-
     def get_permissions(self):
         if self.request.method == 'GET':
             return []
@@ -140,7 +139,6 @@ class MarcheListView(APIView):
         statut    = request.query_params.get('statut')
         categorie = request.query_params.get('categorie')
         search    = request.query_params.get('search')
-
         for m in marches:
             ancien = m.statut
             if m.date_fin < timezone.now():
@@ -151,7 +149,6 @@ class MarcheListView(APIView):
                 m.statut = 'actif'
             if m.statut != ancien:
                 m.save(update_fields=['statut'])
-
         if statut and statut != 'tous':
             marches = marches.filter(statut=statut)
         if categorie and categorie != 'Tous':
@@ -162,7 +159,6 @@ class MarcheListView(APIView):
                 Q(id_marche__icontains=search) |
                 Q(detail__icontains=search)
             )
-
         serializer = MarcheSerializer(
             marches, many=True,
             context={'request': request}

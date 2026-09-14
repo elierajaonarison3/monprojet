@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.http import JsonResponse
 from authentication.views import DatabaseTestView
 from authentication.views import InitialiserComptesView
+from config import settings
 
 def home(request):
     return JsonResponse({
@@ -17,3 +18,7 @@ urlpatterns = [
     path('api/test-db/', DatabaseTestView.as_view()),
     path('api/initialiser-comptes/', InitialiserComptesView.as_view()),
 ]
+
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
