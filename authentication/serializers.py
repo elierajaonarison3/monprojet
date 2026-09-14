@@ -3,33 +3,35 @@ from rest_framework import serializers
 from .models import Marche, Soumission, Evaluation
 
 
-
 class MarcheSerializer(serializers.ModelSerializer):
-    jours_restants  = serializers.SerializerMethodField()
-    cree_par_email  = serializers.SerializerMethodField()
+    jours_restants = serializers.SerializerMethodField()
+    cree_par_email = serializers.SerializerMethodField()
     fichier_pdf_url = serializers.SerializerMethodField()
 
     class Meta:
-        model  = Marche
+        model = Marche
         fields = [
-                'id',
-                'id_marche',
-                'titre',
-                'detail',
-                'categorie',
-                'budget',
-                'date_debut',
-                'date_fin',
-                'statut',
-                'fichier_pdf',
-                'fichier_pdf_url',
-                'cree_par_email',
-                'cree_le',
-                'modifie_le',
-                'jours_restants',
-]
+            'id',
+            'id_marche',
+            'titre',
+            'detail',
+            'categorie',
+            'budget',
+            'date_debut',
+            'date_fin',
+            'statut',
+            'fichier_pdf',
+            'fichier_pdf_url',
+            'cree_par_email',
+            'cree_le',
+            'modifie_le',
+            'jours_restants',
+        ]
         read_only_fields = [
-            'id_marche', 'statut', 'cree_le', 'modifie_le'
+            'id_marche',
+            'statut',
+            'cree_le',
+            'modifie_le'
         ]
 
     def get_jours_restants(self, obj):
@@ -42,30 +44,36 @@ class MarcheSerializer(serializers.ModelSerializer):
 
     def get_fichier_pdf_url(self, obj):
         if obj.fichier_pdf:
-            request = self.context.get('request')
-            return request.build_absolute_uri(
-                obj.fichier_pdf.url) if request else obj.fichier_pdf.url
+            return obj.fichier_pdf.url
         return None
 
 
-
 class SoumissionSerializer(serializers.ModelSerializer):
-    marche_titre      = serializers.SerializerMethodField()
-    marche_id         = serializers.SerializerMethodField()
+    marche_titre = serializers.SerializerMethodField()
+    marche_id = serializers.SerializerMethodField()
     fournisseur_email = serializers.SerializerMethodField()
-    fichier_pdf_url   = serializers.SerializerMethodField()
+    fichier_pdf_url = serializers.SerializerMethodField()
 
     class Meta:
-        model  = Soumission
+        model = Soumission
         fields = [
-            'id', 'marche', 'marche_titre', 'marche_id',
-            'fournisseur', 'fournisseur_email',
-            'montant', 'note',
-            'fichier_pdf', 'fichier_pdf_url',
-            'statut', 'soumis_le',
+            'id',
+            'marche',
+            'marche_titre',
+            'marche_id',
+            'fournisseur',
+            'fournisseur_email',
+            'montant',
+            'note',
+            'fichier_pdf',
+            'fichier_pdf_url',
+            'statut',
+            'soumis_le',
         ]
         read_only_fields = [
-            'fournisseur', 'statut', 'soumis_le'
+            'fournisseur',
+            'statut',
+            'soumis_le'
         ]
 
     def get_marche_titre(self, obj):
@@ -79,18 +87,15 @@ class SoumissionSerializer(serializers.ModelSerializer):
 
     def get_fichier_pdf_url(self, obj):
         if obj.fichier_pdf:
-            request = self.context.get('request')
-            return request.build_absolute_uri(
-                obj.fichier_pdf.url) if request else obj.fichier_pdf.url
+            return obj.fichier_pdf.url
         return None
-
 
 
 class EvaluationSerializer(serializers.ModelSerializer):
     score_moyen = serializers.ReadOnlyField()
 
     class Meta:
-        model  = Evaluation
+        model = Evaluation
         fields = [
             'id',
             'soumission',
@@ -109,32 +114,44 @@ class EvaluationSerializer(serializers.ModelSerializer):
             'modifie_le'
         ]
 
+
 class DossierEvaluateurSerializer(serializers.ModelSerializer):
-    marche_titre        = serializers.CharField(
+    marche_titre = serializers.CharField(
         source='marche.titre')
-    marche_id           = serializers.CharField(
+    marche_id = serializers.CharField(
         source='marche.id_marche')
-    budget_marche       = serializers.DecimalField(
+    budget_marche = serializers.DecimalField(
         source='marche.budget',
-        max_digits=15, decimal_places=2)
-    fournisseur_nom     = serializers.SerializerMethodField()
-    fournisseur_email   = serializers.CharField(
+        max_digits=15,
+        decimal_places=2)
+    fournisseur_nom = serializers.SerializerMethodField()
+    fournisseur_email = serializers.CharField(
         source='fournisseur.email')
     fournisseur_societe = serializers.SerializerMethodField()
-    evaluation          = EvaluationSerializer(read_only=True)
-    statut_evaluation   = serializers.SerializerMethodField()
-    fichier_pdf_url     = serializers.SerializerMethodField()
+    evaluation = EvaluationSerializer(read_only=True)
+    statut_evaluation = serializers.SerializerMethodField()
+    fichier_pdf_url = serializers.SerializerMethodField()
 
     class Meta:
-        model  = Soumission
+        model = Soumission
         fields = [
-            'id', 'marche', 'marche_titre', 'marche_id',
-            'budget_marche', 'montant',
-            'fournisseur', 'fournisseur_nom',
-            'fournisseur_email', 'fournisseur_societe',
-            'note', 'fichier_pdf', 'fichier_pdf_url',
-            'statut', 'soumis_le',
-            'evaluation', 'statut_evaluation',
+            'id',
+            'marche',
+            'marche_titre',
+            'marche_id',
+            'budget_marche',
+            'montant',
+            'fournisseur',
+            'fournisseur_nom',
+            'fournisseur_email',
+            'fournisseur_societe',
+            'note',
+            'fichier_pdf',
+            'fichier_pdf_url',
+            'statut',
+            'soumis_le',
+            'evaluation',
+            'statut_evaluation',
         ]
 
     def get_fournisseur_nom(self, obj):
@@ -153,7 +170,5 @@ class DossierEvaluateurSerializer(serializers.ModelSerializer):
 
     def get_fichier_pdf_url(self, obj):
         if obj.fichier_pdf:
-            request = self.context.get('request')
-            return request.build_absolute_uri(
-                obj.fichier_pdf.url) if request else obj.fichier_pdf.url
+            return obj.fichier_pdf.url
         return None
