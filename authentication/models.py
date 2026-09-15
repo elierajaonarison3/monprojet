@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from .cloudinary_storage import RawMediaCloudinaryStorage
+from cloudinary_storage.storage import RawMediaCloudinaryStorage
 
 User = get_user_model()
 class Marche(models.Model):
@@ -24,8 +24,8 @@ class Marche(models.Model):
     date_fin    = models.DateTimeField()
     statut      = models.CharField(max_length=20, choices=STATUT_CHOICES,
                                    default='actif')
-    fichier_pdf = models.FileField(upload_to='marches/pdf/',
-                                   null=True, blank=True, storage=RawMediaCloudinaryStorage())
+    fichier_pdf = models.FileField(upload_to='marches/pdf/',storage=RawMediaCloudinaryStorage(),
+                                   null=True, blank=True)
     cree_par    = models.ForeignKey(User, on_delete=models.SET_NULL,
                                     null=True, related_name='marches')
     cree_le     = models.DateTimeField(auto_now_add=True)
@@ -65,8 +65,8 @@ class Soumission(models.Model):
                                     related_name='soumissions')
     montant     = models.DecimalField(max_digits=15, decimal_places=2)
     note        = models.TextField(blank=True)
-    fichier_pdf = models.FileField(upload_to='soumissions/pdf/',
-                                   null=True, blank=True, storage=RawMediaCloudinaryStorage())
+    fichier_pdf = models.FileField(upload_to='soumissions/pdf/',storage=RawMediaCloudinaryStorage(),
+                                   null=True, blank=True)
     statut      = models.CharField(max_length=20, choices=STATUT_CHOICES,
                                    default='en_attente')
     soumis_le   = models.DateTimeField(auto_now_add=True)
