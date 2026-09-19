@@ -450,7 +450,7 @@ class EvaluationView(APIView):
         soumission_id   = request.data.get('soumission') or request.data.get('soumission_id')
         concurrencePrix  = request.data.get('concurrencePrix')
         conformite      = request.data.get('conformite')
-        complementarite  = request.data.get('complementaires')
+        complementarite  = request.data.get('complementarite')
         commentaire     = request.data.get('commentaire', '')
         decision        = request.data.get('decision', 'reserve')
 
