@@ -569,22 +569,26 @@ class AdminUtilisateursView(APIView):
     def get(self, request):
         users = User.objects.all()
         data = []
+
         for u in users:
             if u.is_superuser:
                 role = 'Admin'
-            elif u.groups.exists():
-                role = u.groups.first().name
+            elif u.groups.filter(name='PRMP').exists():
+                role = 'PRMP'
+            elif u.groups.filter(name='Évaluateur').exists():
+                role = 'Évaluateur'
             else:
-                role = 'Aucun'
-            data.append({
-                'id':       u.id,
-                'nom':      f'{u.first_name} {u.last_name}'.strip() or u.username,
-                'username': u.username,
-                'email':    u.email,
-                'role':     role,
-            })
-        return Response(data)
+                role = 'Fournisseur'
 
+            data.append({
+                'id': u.id,
+                'nom': f'{u.first_name} {u.last_name}'.strip() or u.username,
+                'username': u.username,
+                'email': u.email,
+                'role': role,
+            })
+
+        return Response(data)
 
 class AdminChangerEmailView(APIView):
     permission_classes = [IsAuthenticated]
