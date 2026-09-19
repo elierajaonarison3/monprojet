@@ -100,8 +100,8 @@ class EvaluationSerializer(serializers.ModelSerializer):
             'id',
             'soumission',
             'concurrencePrix',
-            'conformité',
-            'complementarie',
+            'conformite',
+            'complementarite',
             'commentaire',
             'decision',
             'score_moyen',
@@ -113,7 +113,6 @@ class EvaluationSerializer(serializers.ModelSerializer):
             'evalue_le',
             'modifie_le'
         ]
-
 
 class DossierEvaluateurSerializer(serializers.ModelSerializer):
     marche_titre = serializers.CharField(
