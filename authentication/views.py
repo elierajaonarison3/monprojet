@@ -710,6 +710,7 @@ class InitialiserComptesView(APIView):
 
                 email = compte['email']
                 username = email.split('@')[0]
+                
 
                 user, created = User.objects.get_or_create(
                     email=email,
