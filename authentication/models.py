@@ -37,27 +37,31 @@ class Marche(models.Model):
 
     def save(self, *args, **kwargs):
         from django.utils import timezone
-        
+
         if not self.id_marche:
-            
             annee = timezone.now().year
-            derniermarche=Marche.objects.filter(
+
+            dernier_marche = Marche.objects.filter(
                 id_marche__startswith=f"M-{annee}-"
-            ).order_by('-id_marche')
-            
-        if derniermarche.exists():
-            dernier=derniermarche.first().id_marche
-            derniernumero=int(dernier.split('-')[-1])
-            numero=derniernumero + 1
+            ).order_by("-id_marche").first()
+
+            if dernier_marche:
+                dernier_numero = int(dernier_marche.id_marche.split("-")[-1])
+                numero = dernier_numero + 1
+            else:
+                numero = 1
+
+            self.id_marche = f"M-{annee}-{numero:03d}"
+
+        maintenant = timezone.now()
+
+        if self.date_fin < maintenant:
+            self.statut = "expire"
+        elif (self.date_fin - maintenant).days <= 5:
+            self.statut = "bientot"
         else:
-            numero=1
-        self.id_marche = f"M-{annee}-{1:03d}"  
-        if self.date_fin < timezone.now():
-            self.statut = 'expire'
-        elif (self.date_fin - timezone.now()).days <= 5:
-            self.statut = 'bientot'
-        else:
-            self.statut = 'actif'
+            self.statut = "actif"
+
         super().save(*args, **kwargs)
 
 
