@@ -43,7 +43,7 @@ class Marche(models.Model):
             annee = timezone.now().year
             derniermarche=Marche.objects.filter(
                 id_marche__startswith=f"M-{annee}-"
-            ).order_by(-id_marche)
+            ).order_by('-id_marche')
             
         if derniermarche.exists():
             dernier=derniermarche.first().id_marche
