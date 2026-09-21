@@ -51,7 +51,7 @@ class Marche(models.Model):
             numero=derniernumero + 1
         else:
             numero=1
-        
+        self.id_marche = f"M-{annee}-{1:03d}"  
         if self.date_fin < timezone.now():
             self.statut = 'expire'
         elif (self.date_fin - timezone.now()).days <= 5:
