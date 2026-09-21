@@ -36,13 +36,22 @@ class Marche(models.Model):
         return f"{self.id_marche} - {self.titre}"
 
     def save(self, *args, **kwargs):
-        if not self.id_marche:
-            from django.utils import timezone
-            annee = timezone.now().year
-            count = Marche.objects.filter(
-                cree_le__year=annee).count() + 1
-            self.id_marche = f"M-{annee}-{str(count).zfill(3)}"
         from django.utils import timezone
+        
+        if not self.id_marche:
+            
+            annee = timezone.now().year
+            derniermarche=Marche.objects.filter(
+                id_marche__startswith=f"M-{annee}-"
+            ).order_by(-id_marche)
+            
+        if derniermarche.exists():
+            dernier=derniermarche.first().id_marche
+            derniernumero=int(dernier.split('-')[-1])
+            numero=derniernumero + 1
+        else:
+            numero=1
+        
         if self.date_fin < timezone.now():
             self.statut = 'expire'
         elif (self.date_fin - timezone.now()).days <= 5:
